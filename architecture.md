@@ -1,1 +1,1 @@
-# neomura > [Specification](./readme.md) > Architecture
+# neomura > [specification](./readme.md) > Architecture

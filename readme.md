@@ -1,4 +1,4 @@
-# neomura > Specification
+# neomura > specification
 
 | Document                          | Description                              |
 | --------------------------------- | ---------------------------------------- |

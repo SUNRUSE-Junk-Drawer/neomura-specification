@@ -1,1 +1,1 @@
-# neomura > [Specification](./readme.md) > API
+# neomura > [specification](./readme.md) > API
