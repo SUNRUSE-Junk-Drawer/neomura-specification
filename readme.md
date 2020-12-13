@@ -1,8 +1,8 @@
 # neomura > specification
 
-| Document                          | Description                              |
-| --------------------------------- | ---------------------------------------- |
-| [license](./license.md)           | MIT License.                             |
-| [features](./features.md)         | Feature set of simulated games console.  |
-| [architecture](./architecture.md) | Application lifecycle for hosted games.  |
-| [api](./api.md)                   | WebAssembly API between games and hosts. |
+| document                          | description                             |
+| --------------------------------- | --------------------------------------- |
+| [license](./license.md)           | mit license.                            |
+| [features](./features.md)         | feature set of simulated games console  |
+| [architecture](./architecture.md) | application lifecycle for hosted games  |
+| [api](./api.md)                   | webassembly api between games and hosts |
