@@ -1,4 +1,4 @@
-# [Neomura](https://github.com/neomura) > Specification
+# neomura > Specification
 
 | Document                          | Description                              |
 | --------------------------------- | ---------------------------------------- |
