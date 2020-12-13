@@ -1,1 +1,1 @@
-# [Neomura](../..) > [Specification](../readme.md) > Features
+# [Neomura](/neomura) > [Specification](../readme.md) > Features

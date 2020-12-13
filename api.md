@@ -1,1 +1,1 @@
-# [Neomura](../..) > [Specification](../readme.md) > API
+# [Neomura](/neomura) > [Specification](../readme.md) > API

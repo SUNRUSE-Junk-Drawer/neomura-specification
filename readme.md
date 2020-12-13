@@ -1,4 +1,4 @@
-# [Neomura](..) > Specification
+# [Neomura](/neomura) > Specification
 
 | Document                          | Description                              |
 | --------------------------------- | ---------------------------------------- |
