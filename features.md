@@ -22,7 +22,7 @@ authenticity of 4:3 and the need to fill 16:9 widescreen monitors.
 
 the virtual display is to be scaled to the largest integer scaling which will
 fit within physical display without cropping, then centered.  any remaining is
-to be black (RGB 0, 0, 0).
+to be black (rgb 0, 0, 0).
 
 the vertical resolution of 180 is a factor of most common display resolutions,
 and should therefore fit most displays well with integer scaling:
