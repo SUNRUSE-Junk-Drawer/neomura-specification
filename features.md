@@ -67,9 +67,9 @@ submission to a system audio api.
 ### suggested layout
 
 ```
-    .--------------.---------------------------------------.---------------.
-   | left shoulder |                                       | right shoulder |
- .-'---------------'                                       '----------------'-.
+    .-------------.----------------------------------------.---------------.
+   | left trigger |                                        | right trigger |
+ .-'--------------'                                        '----------------'-.
 |                                                                              |
 |              ^                                             ( )               |
 |                                                                              |
@@ -81,3 +81,68 @@ submission to a system audio api.
 |                                                                              |
  '----------------------------------------------------------------------------'
 ```
+
+### suggested mappings
+
+these may be tweaked for game-specific hosts, and should generally be remappable
+in the host's settings.
+
+#### left joy con (held horizontally with strap attached)
+
+| input         | mapping             |
+| ------------- | ------------------- |
+| d-pad         | left stick          |
+| face buttons  | directional buttons |
+| left trigger  | sl button           |
+| right trigger | sr button           |
+| pause button  | - button            |
+
+#### right joy con (held horizontally with strap attached)
+
+| input         | mapping             |
+| ------------- | ------------------- |
+| d-pad         | right stick         |
+| face buttons  | a/b/x/y buttons     |
+| left trigger  | sl button           |
+| right trigger | sr button           |
+| pause button  | + button            |
+
+#### joy con pair
+
+| input         | mapping                           |
+| ------------- | --------------------------------- |
+| d-pad         | left stick or directional buttons |
+| face buttons  | a/b/x/y buttons                   |
+| left trigger  | l/zl buttons                      |
+| right trigger | r/zr buttons                      |
+| pause button  | -/+ buttons                       |
+
+#### dualshock 4
+
+| input         | mapping                              |
+| ------------- | ------------------------------------ |
+| d-pad         | directional buttons or left stick    |
+| face buttons  | cross/square/circle/triangle buttons |
+| left trigger  | l1/l2 buttons                        |
+| right trigger | r1/r2 buttons                        |
+| pause button  | options/touch pad buttons            |
+
+#### xbox series controller
+
+| input         | mapping                       |
+| ------------- | ----------------------------- |
+| d-pad         | left stick or directional pad |
+| face buttons  | a/b/x/y buttons               |
+| left trigger  | left bumper/left trigger      |
+| right trigger | right bumper/right trigger    |
+| pause button  | back/start buttons            |
+
+#### keyboard (us layout)
+
+| input         | mapping                       |
+| ------------- | ----------------------------- |
+| d-pad         | w/a/s/d keys                  |
+| face buttons  | i/j/k/l keys                  |
+| left trigger  | q/u keys                      |
+| right trigger | e/o keys                      |
+| pause button  | esc key                       |
