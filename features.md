@@ -48,10 +48,10 @@ and should therefore fit most displays well with integer scaling:
 audio and video generation are to be kept in perfect sync, 735 samples being one
 buffer per 60hz frame at the sample rate of 44100hz.
 
-the buffer length of 735 is as exposed to the application.  in most cases, it
-will be highly recommended for performance and compatability reasons to allocate
-a larger buffer and batch several frames' samples together into a single buffer
-for submission to a system audio api.
+the buffer length of 735 is as exposed to the game.  in most cases, it will be
+recommended for performance and compatability reasons to allocate a larger
+buffer internal to the host which batches several frames' samples together for
+submission to a system audio api.
 
 ## input
 
