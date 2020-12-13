@@ -1,1 +1,1 @@
-# neomura > [specification](./readme.md) > Features
+# neomura > [specification](./readme.md) > features
