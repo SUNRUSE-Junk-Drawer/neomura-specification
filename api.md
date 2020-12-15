@@ -92,6 +92,19 @@ if all state should be discarded, the "state_version" export can be added to the
 game.  hosts are to discard all state and start from a clean slate should this
 number not match on attempting to continue a previous session.
 
+### timing
+
+export "output_refresh_rate" specifies the game's refresh rate, in hertz.
+
+the host is to abort the game should this export be missing or less than or
+equal to zero.
+
+### gamepad quantity
+
+export "gamepad_quantity" specifies the maximum number of gamepads.
+
+the host is to abort the game should this be missing or less than zero.
+
 ### outputs
 
 any export prefixed "output_" is a pointer to the start of a region of "memory",
@@ -107,14 +120,27 @@ export.
 
 #### video
 
-"output_video" is a pointer to 145800 u8s, representing the video framebuffer.
+"output_video" is a pointer to an array of u8s, representing the video
+framebuffer.
 
 each u8 represents the intensity of a channel within a pixel, running through
 channels red, green and blue, then from left to right, then from top to bottom.
 
+export "output_video_width" specifies the width of the framebuffer (in pixel
+columns).
+
+the host is to abort the game should this be missing or less than or equal to
+zero.
+
+export "output_video_height" specifies an override for the height of the
+framebuffer (in pixel rows).
+
+the host is to abort the game should this be missing or less than or equal to
+zero.
+
 #### audio
 
-"output_audio" is a pointer to 1470 f32s, representing the audio buffer.
+"output_audio" is a pointer to an array of f32s, representing the audio buffer.
 
 each f32 is a single sample, with each pair representing a single sample for the
 left and right channels respectively.
@@ -122,10 +148,15 @@ left and right channels respectively.
 the expected range is from -1 to +1.  hosts are to clip if games output values
 outside this range.
 
+export "output_audio_sample_rate" specifies the game's sample rate, in hertz.
+
+the host is to abort the game should this be missing, less than or equal to
+zero, or not evenly divisible by the refresh rate.
+
 #### gamepad rumble
 
-"output_gamepad_rumble" is a pointer to 8 u8s, representing force feedback
-intensity.
+"output_gamepad_rumble" is a pointer to an array of u8s, representing force
+feedback intensity.
 
 each u8 is the intensity of the rumble for a specific gamepad, where 0 is a
 total absence of force feedback, and 255 is the most force feedback the gamepad
@@ -150,8 +181,8 @@ export.
 
 #### gamepad state
 
-"input_gamepad_connected" is a pointer to 8 u8s, where each represents the state
-of a gamepad.
+"input_gamepad_connected" is a pointer to an array of u8s, where each represents
+the state of a gamepad.
 
 | value | name         | description                                  |
 | ----- | ------------ | -------------------------------------------- |
@@ -169,7 +200,7 @@ all other possible values are reserved.
 
 #### gamepad buttons
 
-the following inputs are pointers to lists of 8 u8s, where each represents the
+the following inputs are pointers to arrays of u8s, where each u8 represents the
 state of a button on a gamepad.
 
 - input_gamepad_dpad_up

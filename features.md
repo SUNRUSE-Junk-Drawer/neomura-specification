@@ -4,16 +4,19 @@
 
 | property           | value                                      |
 | ------------------ | ------------------------------------------ |
-| resolution         | 270x180                                    |
-| orientation        | landscape                                  |
-| aspect ratio       | 3:2                                        |
+| resolution         | 270x180*                                   |
+| orientation        | landscape*                                 |
+| aspect ratio       | 3:2*                                       |
 | pixel aspect ratio | 1:1                                        |
 | color depth        | 24-bit (8-8-8 red/green/blue, interleaved) |
 | color range        | full (0 - 255) (not nstc-safe)             |
 | color space        | gamma (2.2)                                |
-| refresh rate       | 60Hz                                       |
+| refresh rate       | 60Hz*                                      |
 | vsync              | yes                                        |
 | safe area          | full frame; no overscan                    |
+
+any values marked with an asterisk are specified by games, and are provided as
+recommendations.
 
 ### resolution and scaling notes
 
@@ -38,10 +41,13 @@ and should therefore fit most displays well with integer scaling:
 
 | property      | value                       |
 | ------------- | --------------------------- |
-| sample rate   | 44100hz                     |
+| sample rate   | 44100hz*                    |
 | bit depth     | 32 (ieee floating point)    |
 | channels      | 2 (left/right, interleaved) |
-| buffer length | 735 per channel             |
+| buffer length | 735 per channel*            |
+
+any values marked with an asterisk are specified by games, and are provided as
+recommendations.
 
 ### timing notes
 
@@ -57,12 +63,15 @@ submission to a system audio api.
 
 | property                       | value                                      |
 | ------------------------------ | ------------------------------------------ |
-| maximum simulataneous gamepads | 8                                          |
+| maximum simulataneous gamepads | 4*                                         |
 | force feedback/rumble          | 256 intensity levels including deactivated |
 | d-pads per gamepad             | 1                                          |
 | face buttons per gamepad       | 4 (arranged like a d-pad)                  |
 | triggers per gamepad           | 2 (left/right)                             |
 | other buttons per gamepad      | 1 (pause)                                  |
+
+any values marked with an asterisk are specified by games, and are provided as
+recommendations.
 
 ### suggested layout
 
