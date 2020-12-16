@@ -228,7 +228,7 @@ pointer with memory to a buffer where game state is stored.
 the host is to stop and raise an error should this not fit within memory, or
 overlap any other described memory region.
 
-on startup, there are four possibilities:
+on startup, there are five possibilities:
 
 - if the host does not have a value to restore for this state buffer, it is
   initialized with all zero bytes.
@@ -240,6 +240,8 @@ on startup, there are four possibilities:
 - if the host has a value to restore for ths state buffer which is longer than
   the size now described, the value is written, but truncated at the end to fit
   within the new buffer size.
+- if the host has a value, but the corresponding state buffer no longer exists,
+  it is to be discarded.
 
 ### state_*_size
 
