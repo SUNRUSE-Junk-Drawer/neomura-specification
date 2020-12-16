@@ -27,195 +27,220 @@ this allows for:
 
 ## game webassembly module exports
 
-the "memory" export is required, and must be a memory export.
+the host is to stop and raise an error should an export be present as an invalid
+type, out of range, or without one of its dependencies.  otherwise, all exports
+are optional.
 
-### events
+| name                | type     | dependencies                                 |
+| ------------------- | -------- | -------------------------------------------- |
+| memory              | memory   | n/a                                          |
+| refresh_rate        | i32      | n/a                                          |
+| elapse              | function | refresh_rate                                 |
+| video_render        | function | refresh_rate video_buffer                    |
+| video_buffer        | i32      | memory video_render video_width video_height |
+| video_width         | i32      | video_buffer                                 |
+| video_height        | i32      | video_buffer                                 |
+| audio_render        | function | refresh_rate audio_buffer                    |
+| audio_buffer        | i32      | memory audio_render audio_length             |
+| audio_length        | i32      | audio_buffer                                 |
+| inputs              | i32      | n/a                                          |
+| input_state         | i32      | memory inputs                                |
+| input_dpad_left     | i32      | memory inputs                                |
+| input_dpad_right    | i32      | memory inputs                                |
+| input_dpad_up       | i32      | memory inputs                                |
+| input_dpad_down     | i32      | memory inputs                                |
+| input_face_left     | i32      | memory inputs                                |
+| input_face_right    | i32      | memory inputs                                |
+| input_face_up       | i32      | memory inputs                                |
+| input_face_down     | i32      | memory inputs                                |
+| input_trigger_left  | i32      | memory inputs                                |
+| input_trigger_right | i32      | memory inputs                                |
+| input_pause         | i32      | memory inputs                                |
+| input_rumble_render | function | input_rumble_buffer                          |
+| input_rumble_buffer | i32      | memory inputs input_rumble_render            |
+| state_version       | i32      | n/a                                          |
+| state_*_buffer      | i32      | memory state_version state_*_size            |
+| state_*_size        | i32      | state_*_buffer                               |
 
-the host will invoke exported functions in response to events.
+### memory
 
-it will not invoke unrecognized functions, and continue working as normal should
-an event it supports not be present.
+export of the module's internal memory space.
 
-#### elapse
+### refresh_rate
 
-the "elapse" export is executed 60 times per second while the game is running.
+synchronized display refresh rate and gameplay tick rate, in hertz.
 
-it must be deterministic.
-
-#### render
-
-the "render" export is executed whenever the host wishes to refresh its outputs.
-
-this may be executed without calling elapse.
-
-### state
-
-any export prefixed "state_" except "state_version" is a pointer to the start
-of a region of "memory", representing an area of the game's internal state.
-
-games must only read from these buffers during a render event.
-
-games are free to read from and write to these buffers during an elapse event.
-
-all state exports must also include a "state_" prefixed, "_size" suffixed export
-which is a constant indicating how large the state region is, in bytes.
-
-the host will abort the game should the specified range not fit in the memory
-export, or should the size be less than or equal to zero.
-
-the host will initialize all state memory with zeroes before any events are
-invoked.
-
-if the host has state values on hand (such as from a previous session, a network
-multiplayer session or a hot reload), these will be injected between
-initialization and the invocation of the first event.
-
-if the buffer is smaller than that the host wishes to inject, the host will only
-inject as many bytes as now possible (effectively truncating it).
-
-if the buffer is larger than that the host wishes to inject, the host will only
-inject the bytes it has, leaving the rest of the buffer as zeroes.
-
-if the host has states value on hand for which there is are longer state
-exports, it is to discard them and continue executing the game.
-
-#### version tolerance
-
-it is recommended that games keep simple, primitive types in state buffers for
-easier version tolerance.
-
-if breaking changes are unavoidable, the game can rename affected fields (in
-which case the host will not inject the previous, incompatible value,
-preserving all other state).
-
-if all state should be discarded, the "state_version" export can be added to the
-game.  hosts are to discard all state and start from a clean slate should this
-number not match on attempting to continue a previous session.
-
-### timing
-
-export "output_refresh_rate" specifies the game's refresh rate, in hertz.
-
-the host is to abort the game should this export be missing or less than or
-equal to zero.
-
-### gamepad quantity
-
-export "gamepad_quantity" specifies the maximum number of gamepads.
-
-the host is to abort the game should this be missing or less than zero.
-
-### outputs
-
-any export prefixed "output_" is a pointer to the start of a region of "memory",
-through which the game can output information to the host.
-
-hosts are to ignore any "output_"-prefixed export they do not recognize, and
-continue working as normal should outputs it supports not be present.
-
-games must only write to these buffers, and only during a render event.
-
-the host will abort the game should the specified range not fit in the memory
-export.
-
-#### video
-
-"output_video" is a pointer to an array of u8s, representing the video
-framebuffer.
-
-each u8 represents the intensity of a channel within a pixel, running through
-channels red, green and blue, then from left to right, then from top to bottom.
-
-export "output_video_width" specifies the width of the framebuffer (in pixel
-columns).
-
-the host is to abort the game should this be missing or less than or equal to
+the host is to stop and raise an error should this be less than or equal to
 zero.
 
-export "output_video_height" specifies an override for the height of the
-framebuffer (in pixel rows).
+### elapse
 
-the host is to abort the game should this be missing or less than or equal to
+called once per gameplay tick.  must be a deterministic function which only
+reads from input_* and state_*\_buffer, and may write back to state_\*_buffer.
+
+may be called multiple times without calling any *_render functions.
+
+### video_render
+
+called when the display must be refreshed.  must be a deterministic function
+which only reads from input_* and state_*_buffer, and writes to video_buffer.
+
+may be called multiple times without calling elapse.
+
+### video_buffer
+
+pointer within memory to a buffer of u8s.
+
+each u8 represents the intensity of a color channel for a pixel, where 0 is
+the minimum possible intensity and 255 is the maximum possible intensity.
+
+runs through channels red, green and blue, then from left to right, then from
+top to bottom.
+
+the host is to stop and raise an error should this not fit within memory, or
+overlap any other described memory region.
+
+### video_width
+
+the width of the display, in pixel columns.
+
+the host is to stop and raise an error should this be less than or equal to
 zero.
 
-#### audio
+### video_height
 
-"output_audio" is a pointer to an array of f32s, representing the audio buffer.
+the height of the display, in pixel rows.
 
-each f32 is a single sample, with each pair representing a single sample for the
-left and right channels respectively.
+the host is to stop and raise an error should this be less than or equal to
+zero.
 
-the expected range is from -1 to +1.  hosts are to clip if games output values
-outside this range.
+### audio_render
 
-export "output_audio_sample_rate" specifies the game's sample rate, in hertz.
+called when the audio output buffer must be refreshed.  must be a deterministic
+function which only reads from input_* and state_*_buffer, and writes to
+audio_buffer.
 
-the host is to abort the game should this be missing, less than or equal to
-zero, or not evenly divisible by the refresh rate.
+may be called multiple times without calling elapse.
 
-#### gamepad rumble
+### audio_buffer
 
-"output_gamepad_rumble" is a pointer to an array of u8s, representing force
-feedback intensity.
+pointer within memory to a buffer of f32s.
 
-each u8 is the intensity of the rumble for a specific gamepad, where 0 is a
-total absence of force feedback, and 255 is the most force feedback the gamepad
-can produce.
+each f32 represents sound pressure for a single audio sample, where the expected
+range is from -1 to +1.  hosts are to clamp to this range.
 
-values are ignored for gamepads which are either not connected locally, or do
-not have force feedback.
+interleaved stereo; the first sample is from the left channel, the second from
+the right channel, and so forth.
+
+the host is to stop and raise an error should this not fit within memory, or
+overlap any other described memory region.
+
+### audio_length
+
+the number of samples per channel per gameplay tick; multply by refresh_rate to
+calculate effective sample rate.
+
+the host is to stop and raise an error should this be less than or equal to
+zero.
 
 ### inputs
 
-any export prefixed "input_" is a pointer to the start of a region of "memory",
-through which the host can output information to the game.
+the number of gamepads connected to the system.
 
-hosts are to ignore any "input_"-prefixed export they do not recognize, and
-continue working as normal should inputs it supports not be present.
+the host is to stop and raise an error should this be less than or equal to
+zero.
 
-games must only read from these buffers, and only during an elapse or render
-event.
+### input_state
 
-the host will abort the game should the specified range not fit in the memory
-export.
+pointer within memory to a buffer of u8s.
 
-#### gamepad state
+each u8 represents the state of a gamepad.
 
-"input_gamepad_connected" is a pointer to an array of u8s, where each represents
-the state of a gamepad.
+| input_state | description                                    |
+| ----------- | ---------------------------------------------- |
+| 0           | the gamepad is not connected.                  |
+| 1           | the gamepad is connected to the local machine. |
+| 2           | the gamepad is connected to a remote machine.  |
 
-| value | name         | description                                  |
-| ----- | ------------ | -------------------------------------------- |
-| 0     | disconnected | the gamepad is not connected.                |
-| 1     | remote       | the gamepad is connected to another machine. |
-| 2     | local        | the gamepad is connected to this machine.    |
+elapse must treat locally and remotely connected gamepads as equivalent, so that
+game logic is executed in the same manner on all machines in the session.
 
-a remote gamepad might represent a player on another system participating over a
-network connection.  they are playing the same game, but the game may render
-differently, such as not including a split screen viewport for them.
+*_render may distinguish between them; for instance, a split-screen game might
+only render video and audio for players with gamepads connected locally, or
+indicate which players are local and remote in the user interface.
 
-remote and local gamepads must be treated identically during the elapse event.
+all other values are reserved for future use.
 
-all other possible values are reserved.
+the host is to stop and raise an error should this not fit within memory, or
+overlap any other described memory region.
 
-#### gamepad buttons
+### input_dpad_*, input_face_*, input_trigger_*, input_pause
 
-the following inputs are pointers to arrays of u8s, where each u8 represents the
-state of a button on a gamepad.
+pointer within memory to a buffer of u8s.
 
-- input_gamepad_dpad_up
-- input_gamepad_dpad_down
-- input_gamepad_dpad_left
-- input_gamepad_dpad_right
-- input_gamepad_face_up
-- input_gamepad_face_down
-- input_gamepad_face_left
-- input_gamepad_face_right
-- input_gamepad_trigger_left
-- input_gamepad_trigger_right
-- input_gamepad_pause
+each u8 represents the state of the named button on a specific gamepad.
 
-each u8 is to be 0 should the controller be disconnected or the button not be
-active, and 1 should the button be active.
+| input_* | description                                                   |
+| ------- | ------------------------------------------------------------- |
+| 0       | the gamepad is not connected, or its button is not depressed. |
+| 255     | the gamepad is connected, and its button is depressed.        |
 
-all other possible values are reserved.
+all other values are reserved for future use.
+
+the host is to stop and raise an error should this not fit within memory, or
+overlap any other described memory region.
+
+### input_rumble_render
+
+called when gamepad force feedback must be refreshed.  must be a deterministic
+function which only reads from input_* and state_*_buffer, and writes to
+input_rumble_buffer.
+
+may be called multiple times without calling elapse.
+
+### input_rumble_buffer
+
+pointer within memory to a buffer of u8s.
+
+each u8 represents the intensity of the force feedback for a specific gamepad,
+where 0 is an absence of force feedback, and 255 is the most force feedback the
+gamepad is capable of producing.
+
+the host is to stop and raise an error should this not fit within memory, or
+overlap any other described memory region.
+
+the host is to ignore values given for gamepads not connected locally, or which
+do not support force feedback.
+
+### state_version
+
+if the host has state to restore for this game, it must have also have a record
+of the state_version of the game from which that state was taken.
+
+if this value has changed, it represents a breaking change in how the game
+structures or interacts with its internal state, and any saved state is to be
+discarded, instead starting afresh.
+
+### state_*_buffer
+
+pointer with memory to a buffer where game state is stored.
+
+the host is to stop and raise an error should this not fit within memory, or
+overlap any other described memory region.
+
+on startup, there are four possibilities:
+
+- if the host does not have a value to restore for this state buffer, it is
+  initialized with all zero bytes.
+- if the host has a value to restore for this state buffer and the size matches,
+  the value is written verbatim to the module.
+- if the host has a value to restore for this state buffer which is shorter than
+  the size now described, the value is written, and the remaining space in the
+  state buffer initialized with all zero bytes.
+- if the host has a value to restore for ths state buffer which is longer than
+  the size now described, the value is written, but truncated at the end to fit
+  within the new buffer size.
+
+### state_*_size
+
+length, in bytes, of the corresponding state_*_buffer.
