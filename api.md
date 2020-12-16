@@ -223,7 +223,7 @@ discarded, instead starting afresh.
 
 ### state_*_buffer
 
-pointer with memory to a buffer where game state is stored.
+pointer within memory to a buffer where game state is stored.
 
 the host is to stop and raise an error should this not fit within memory, or
 overlap any other described memory region.
