@@ -43,6 +43,8 @@ are optional.
 | audio_render        | function | refresh_rate audio_buffer                    |
 | audio_buffer        | i32      | memory audio_render audio_length             |
 | audio_length        | i32      | audio_buffer                                 |
+| rumble_render       | function | rumble_buffer                                |
+| rumble_buffer       | i32      | memory inputs rumble_render                  |
 | inputs              | i32      | n/a                                          |
 | input_state         | i32      | memory inputs                                |
 | input_dpad_left     | i32      | memory inputs                                |
@@ -56,8 +58,6 @@ are optional.
 | input_trigger_left  | i32      | memory inputs                                |
 | input_trigger_right | i32      | memory inputs                                |
 | input_pause         | i32      | memory inputs                                |
-| rumble_render       | function | rumble_buffer                                |
-| rumble_buffer       | i32      | memory inputs rumble_render                  |
 | state_version       | i32      | n/a                                          |
 | state_*_buffer      | i32      | memory state_version state_*_size            |
 | state_*_size        | i32      | state_*_buffer                               |
@@ -151,6 +151,28 @@ calculate effective sample rate.
 the host is to stop and raise an error should this not fit within memory,
 overlap any other described memory region, or be zero.
 
+### rumble_render
+
+called when gamepad force feedback must be refreshed.  must be a deterministic
+function which only reads from input_* and state_*_buffer, and writes to
+rumble_buffer.
+
+may be called multiple times without calling elapse.
+
+### rumble_buffer
+
+pointer within memory to a buffer of u8s.
+
+each u8 represents the intensity of the force feedback for a specific gamepad,
+where 0 is an absence of force feedback, and 255 is the most force feedback the
+gamepad is capable of producing.
+
+the host is to stop and raise an error should this not fit within memory, or
+overlap any other described memory region.
+
+the host is to ignore values given for gamepads not connected locally, or which
+do not support force feedback.
+
 ### inputs
 
 pointer within memory to a u8.
@@ -199,28 +221,6 @@ all other values are reserved for future use.
 
 the host is to stop and raise an error should this not fit within memory, or
 overlap any other described memory region.
-
-### rumble_render
-
-called when gamepad force feedback must be refreshed.  must be a deterministic
-function which only reads from input_* and state_*_buffer, and writes to
-rumble_buffer.
-
-may be called multiple times without calling elapse.
-
-### rumble_buffer
-
-pointer within memory to a buffer of u8s.
-
-each u8 represents the intensity of the force feedback for a specific gamepad,
-where 0 is an absence of force feedback, and 255 is the most force feedback the
-gamepad is capable of producing.
-
-the host is to stop and raise an error should this not fit within memory, or
-overlap any other described memory region.
-
-the host is to ignore values given for gamepads not connected locally, or which
-do not support force feedback.
 
 ### state_version
 
