@@ -68,10 +68,12 @@ export of the module's internal memory space.
 
 ### refresh_rate
 
+pointer within memory to a u16.
+
 synchronized display refresh rate and gameplay tick rate, in hertz.
 
-the host is to stop and raise an error should this be less than or equal to
-zero.
+the host is to stop and raise an error should this not fit within memory,
+overlap any other described memory region, or be zero.
 
 ### elapse
 
@@ -102,17 +104,21 @@ overlap any other described memory region.
 
 ### video_width
 
+pointer within memory to a u16.
+
 the width of the display, in pixel columns.
 
-the host is to stop and raise an error should this be less than or equal to
-zero.
+the host is to stop and raise an error should this not fit within memory,
+overlap any other described memory region, or be zero.
 
 ### video_height
 
+pointer within memory to a u16.
+
 the height of the display, in pixel rows.
 
-the host is to stop and raise an error should this be less than or equal to
-zero.
+the host is to stop and raise an error should this not fit within memory,
+overlap any other described memory region, or be zero.
 
 ### audio_render
 
@@ -137,18 +143,22 @@ overlap any other described memory region.
 
 ### audio_length
 
+pointer within memory to a u16.
+
 the number of samples per channel per gameplay tick; multply by refresh_rate to
 calculate effective sample rate.
 
-the host is to stop and raise an error should this be less than or equal to
-zero.
+the host is to stop and raise an error should this not fit within memory,
+overlap any other described memory region, or be zero.
 
 ### inputs
 
+pointer within memory to a u8.
+
 the number of gamepads connected to the system.
 
-the host is to stop and raise an error should this be less than or equal to
-zero.
+the host is to stop and raise an error should this not fit within memory,
+overlap any other described memory region, or be zero.
 
 ### input_state
 
@@ -214,12 +224,17 @@ do not support force feedback.
 
 ### state_version
 
+pointer within memory to a u16.
+
 if the host has state to restore for this game, it must have also have a record
 of the state_version of the game from which that state was taken.
 
 if this value has changed, it represents a breaking change in how the game
 structures or interacts with its internal state, and any saved state is to be
 discarded, instead starting afresh.
+
+the host is to stop and raise an error should this not fit within memory or
+overlap any other described memory region.
 
 ### state_*_buffer
 
@@ -245,4 +260,9 @@ on startup, there are five possibilities:
 
 ### state_*_size
 
+pointer within memory to a u32.
+
 length, in bytes, of the corresponding state_*_buffer.
+
+the host is to stop and raise an error should this not fit within memory or
+overlap any other described memory region.
