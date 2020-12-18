@@ -56,8 +56,8 @@ are optional.
 | input_trigger_left  | i32      | memory inputs                                |
 | input_trigger_right | i32      | memory inputs                                |
 | input_pause         | i32      | memory inputs                                |
-| input_rumble_render | function | input_rumble_buffer                          |
-| input_rumble_buffer | i32      | memory inputs input_rumble_render            |
+| rumble_render       | function | rumble_buffer                                |
+| rumble_buffer       | i32      | memory inputs rumble_render                  |
 | state_version       | i32      | n/a                                          |
 | state_*_buffer      | i32      | memory state_version state_*_size            |
 | state_*_size        | i32      | state_*_buffer                               |
@@ -200,15 +200,15 @@ all other values are reserved for future use.
 the host is to stop and raise an error should this not fit within memory, or
 overlap any other described memory region.
 
-### input_rumble_render
+### rumble_render
 
 called when gamepad force feedback must be refreshed.  must be a deterministic
 function which only reads from input_* and state_*_buffer, and writes to
-input_rumble_buffer.
+rumble_buffer.
 
 may be called multiple times without calling elapse.
 
-### input_rumble_buffer
+### rumble_buffer
 
 pointer within memory to a buffer of u8s.
 
