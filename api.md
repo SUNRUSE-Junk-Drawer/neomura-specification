@@ -96,11 +96,19 @@ pointer within memory to a buffer of u8s.
 each u8 represents the intensity of a color channel for a pixel, where 0 is
 the minimum possible intensity and 255 is the maximum possible intensity.
 
-runs through channels red, green and blue, then from left to right, then from
-top to bottom.
+runs through channels red, green, blue and alpha (opacity), then from left to
+right, then from top to bottom.
 
 the host is to stop and raise an error should this not fit within memory, or
 overlap any other described memory region.
+
+#### alpha/opacity
+
+although a channel exists for alpha/opacity, hosts must ignore it, and games
+must leave its value to 255.
+
+currently, this channel only exists for memory alignment purposes, and may be
+used in the future.
 
 ### video_width
 
