@@ -8,4 +8,4 @@ specification for neomura virtual retro games console.
 | [terminology](./terminology.md)   | defines terminology used in these files. |
 | [features](./features.md)         | feature set of simulated games console.  |
 | [api](./api.md)                   | webassembly api between games and hosts. |
-| [catalog](./catalog.ts)           | json format for listing games.           |
+| [catalog](./catalog/index.ts)     | json format for listing games.           |
