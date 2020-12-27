@@ -1,5 +1,11 @@
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
   "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.formatOnSave": false,
+  },
   "editor.detectIndentation": false,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
@@ -9,5 +15,13 @@
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "files.exclude": {
+    ".DS_Store": true,
+    "**/.git": true,
+    "**/*.d.ts": true,
+    "**/*.js": true,
+    "node_modules": true
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
