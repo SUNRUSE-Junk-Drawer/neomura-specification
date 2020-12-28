@@ -1,3 +1,5 @@
+import { CatalogImage } from "../catalog-image";
+
 /**
  * A localization of a catalog.
  */
@@ -14,8 +16,8 @@ export type CatalogLocalization = {
   readonly uiName: string;
 
   /**
-   * The second half of the URL for the localization's icon.  Must refer to an
-   * existing PNG or JPEG.
+   * The square icon used to represent the localization.  May be cropped to a
+   * circle.
    */
-  readonly iconUrlSuffix: string;
+  readonly icon: CatalogImage;
 };

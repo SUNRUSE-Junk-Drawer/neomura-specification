@@ -7,6 +7,8 @@ export {
   CatalogGame,
 } from "./catalog-game";
 
+export { CatalogImage } from "./catalog-image";
+
 export { CatalogLocalization } from "./catalog-localization";
 
 /**
