@@ -18,7 +18,7 @@ export type CatalogGameVersion = {
 
   /**
    * The localizations of the game version.  Must not be empty.  Do not remove
-   * records on update.
+   * records on update.  Ordered earliest to latest.
    */
   readonly versionLocalizations: ReadonlyArray<CatalogGameVersionLocalization>;
 };
